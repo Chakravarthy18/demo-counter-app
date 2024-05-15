@@ -38,6 +38,9 @@ pipeline{
                 withSonarQubeEnv('SonarQube-Server') {
                     sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Nexus \
                     -Dsonar.projectKey=Nexus'''
+                }
+            }
+        }
         stage('Quality Gate Status'){
             steps{
                 script{

@@ -35,10 +35,11 @@ pipeline{
         }
         stage("Sonarqube Analysis") {
             steps {
-                withSonarQubeEnv('SonarQube-Server') {
-                    sh '''$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Nexus \
-                    -Dsonar.projectKey=Nexus'''
-                }
+                script{
+                    withSonarQubeEnv(credentialsId: 'Sonar-token') {
+                        sh 'mvn clean package sonar:sonar'
+                    }
+                }                
             }
         }
         stage('Quality Gate Status'){

@@ -8,7 +8,7 @@ pipeline{
         SCANNER_HOME = tool 'sonar-scanner'
     }
     stages {
-        stage('clean workspace') {
+        stage('Clean Workspace') {
             steps {
                 cleanWs()
             }
@@ -18,14 +18,28 @@ pipeline{
                 git branch: 'main', url: 'https://github.com/Chakravarthy18/demo-counter-app.git'
             }
         }
-        stage('unit testing'){
+        stage('Unit Testing'){
             steps{
                 sh 'mvn test'
             }
         }
-        stage('Integration testing'){
+        stage('Integration Testing'){
             steps{
                 sh 'mvn verify -DskiUnitTests'
+            }
+        }
+        stage('Maven Build'){
+            steps{
+                sh 'mvn clean install'
+            }
+        }
+        stage("Sonarqube Analysis") {
+            steps {
+                withSonarQubeEnv('SonarQube-Server') {
+                    sh '''$SCANNER_HOME/bin/sonar-scanner 
+                    -Dsonar.projectName=Nexus \
+                    -Dsonar.projectKey=Nexus'''
+                }
             }
         }
     }

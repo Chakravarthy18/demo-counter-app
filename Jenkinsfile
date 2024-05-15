@@ -33,12 +33,17 @@ pipeline{
                 sh 'mvn clean install'
             }
         }
-        stage("Sonarqube Analysis") {
-            steps {
-                withSonarQubeEnv('SonarQube-Server') {
-                    sh '''$SCANNER_HOME/bin/sonar-scanner 
-                    -Dsonar.projectName=Nexus \
-                    -Dsonar.projectKey=Nexus'''
+        stage('Sonarqube Analysis'){
+            steps{
+                withSonarQubeEnv(credentialsId: 'Sonar-token') {
+                 sh 'mvn clean package sonar:sonar'            
+                }
+            }
+        }
+        stage('Quality Gate Status'){
+            steps{
+                script{
+                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token'
                 }
             }
         }

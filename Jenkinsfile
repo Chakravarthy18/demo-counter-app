@@ -72,6 +72,17 @@ pipeline{
                 }
             }
         }
+        stage("Docker Build & Push"){
+            steps{
+                script{
+                   withDockerRegistry(credentialsId: 'dockerhub', toolName: 'docker'){   
+                    sh "docker build -t $JOB_NAME:v1.$BUILD_ID ."
+                    sh "docker tag $JOB_NAME:v1.$BUILD_ID chakri18/$JOB_NAME:v1.$BUILD_ID
+                    sh "docker tag $JOB_NAME:v1.$BUILD_ID chakri18/$JOB_NAME:v1.$BUILD_ID:latest
+                   }
+                }
+            }
+        }
     }
 }
     

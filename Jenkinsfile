@@ -92,6 +92,18 @@ pipeline{
                 }
             }
         }
+        stage('Deploy to kubernetes'){
+            steps{
+                script{
+                    dir('Kubernetes'){
+                        withKubeCredentials(kubectlCredentials: [[caCertificate: '', clusterName: 'EKS24', contextName: '', credentialsId: 'Kubernetes', namespace: 'webapps', serverUrl: 'https://10BC373DE62694F98FD0E38539475FD9.gr7.us-east-1.eks.amazonaws.com']]) {
+                            sh 'kubectl apply -f deployment-svc.yml'                                                                                                                                                                                                                                                                
+                        }
+                    }
+
+                }
+            }
+        }
     }
 }
     

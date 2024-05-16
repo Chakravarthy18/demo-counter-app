@@ -59,8 +59,9 @@ pipeline{
         stage('Upload war file to nexus'){
             steps{
                 script{
-                    def readPomVersion = readMavenPom file: 'pom.xml'
+                    /*def readPomVersion = readMavenPom file: 'pom.xml'
                     def nexusRepo = readPomVersion.version.endsWith("SNAPSHOT") ? "nexus-app-snapshot" : "nexus-app-release"
+                    nexusArtifactUploader artifacts: */
                     nexusArtifactUploader artifacts: 
                     [
                         [
@@ -69,17 +70,17 @@ pipeline{
                             type: 'jar'
                         ]
                     ], 
-                    credentialsId: 'nexus-cred',
-                    groupId: 'com.example',
-                    nexusUrl: '44.223.90.95:8081', 
-                    nexusVersion: 'nexus3', 
-                    protocol: 'http', 
-                    repository: nexusRepo,
-                    version: "${readPomVersion.version}"
+                            credentialsId: 'nexus-cred', 
+                            groupId: 'com.example', 
+                            nexusUrl: '44.223.90.95:8081', 
+                            nexusVersion: 'nexus3', 
+                            protocol: 'http', 
+                            repository: 'nexus-app-release', 
+                            version: '2.0.0'
                 }
             }
         }
-         stage("Build & Push Docker Image") {
+        /*stage("Build & Push Docker Image") {
             steps {
                 script {
                     docker.withRegistry('',DOCKER_PASS) {
@@ -91,7 +92,7 @@ pipeline{
                     }
                 }
             }
-        }
+        }*/
     }
 }
     

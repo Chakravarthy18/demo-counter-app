@@ -59,8 +59,8 @@ pipeline{
         stage('Upload war file to nexus'){
             steps{
                 script{
-                    /*def readPomVersion = readMavenPom file: 'pom.xml'
-                    def nexusRepo = readPomVersion.version.endsWith("SNAPSHOT") ? "nexus-app-snapshot" : "nexus-app-release"
+                    def readPomVersion = readMavenPom file: 'pom.xml'
+                    /*def nexusRepo = readPomVersion.version.endsWith("SNAPSHOT") ? "nexus-app-snapshot" : "nexus-app-release"
                     nexusArtifactUploader artifacts: */
                     nexusArtifactUploader artifacts: 
                     [
@@ -76,7 +76,7 @@ pipeline{
                             nexusVersion: 'nexus3', 
                             protocol: 'http', 
                             repository: 'nexus-app-release', 
-                            version: '2.0.0'
+                            version: "${readPomVersion.version}"
                 }
             }
         }

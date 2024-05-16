@@ -60,9 +60,8 @@ pipeline{
             steps{
                 script{
                     def readPomVersion = readMavenPom file: 'pom.xml'
-                    /*def nexusRepo = readPomVersion.version.endsWith("SNAPSHOT") ? "nexus-app-snapshot" : "nexus-app-release"
-                    nexusArtifactUploader artifacts: */
-                    nexusArtifactUploader artifacts: 
+                    def nexusRepo = readPomVersion.version.endsWith("SNAPSHOT") ? "nexus-app-snapshot" : "nexus-app-release"
+                    nexusArtifactUploader artifacts:  
                     [
                         [
                             artifactId: 'springboot', 
@@ -75,12 +74,12 @@ pipeline{
                             nexusUrl: '44.223.90.95:8081', 
                             nexusVersion: 'nexus3', 
                             protocol: 'http', 
-                            repository: 'nexus-app-release', 
+                            repository: nexusRepo, 
                             version: "${readPomVersion.version}"
                 }
             }
         }
-        /*stage("Build & Push Docker Image") {
+        stage("Build & Push Docker Image") {
             steps {
                 script {
                     docker.withRegistry('',DOCKER_PASS) {
@@ -92,7 +91,7 @@ pipeline{
                     }
                 }
             }
-        }*/
+        }
     }
 }
     
